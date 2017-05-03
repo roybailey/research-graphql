@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "A Product following the convention of http://microformats.org/wiki/h-card",
+    "type": "object",
+    "javaName": "UserDto",
+    "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "given-name": { "type": "string" },
+        "family-name": { "type": "string" },
+        "bday": { "type": "string", "format": "date-time" },
+        "email": { "type": "email", "format": "email" }
+    },
+    "required": ["title", "given-name", "family-name", "email"]
+}

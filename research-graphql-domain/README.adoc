@@ -1,0 +1,25 @@
+= JSon schema domain code generation
+
+== Motivation
+
+Look at using json schema definition to code generate Java Data Transfer Objects.
+Idea would be to define domain schema via json schema, so Java backend services could
+build to contract and JavaScript front end can validate the same.
+
+
+== Getting Started
+
+* See schema definition under `src/main/resources/schema`
+* See generated code under package `me.roybailey.data.schema`
+* See code generation steps in maven build
+
+
+== Included in the Box
+
+* JSon schema for User, Product, Order objects
+* Simple code generation using http://www.jsonschema2pojo.org/[Json Schema Code Generator]
+* Enrichment of generated objects to include Lombok builders and LocalDateTime
+
+
+
+

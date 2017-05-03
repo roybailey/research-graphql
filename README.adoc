@@ -1,0 +1,278 @@
+= GraphQL and REST micro-services
+
+== Motivation
+
+Multi-module Java project to test out a Java based GraphQL server backed by REST micro-services.
+
+Targeted at learning GraphQL basics to show how a GraphQL server might work in a real scenario,
+acting as a _'Backend for Frontend'_ aggregator of multiple micro-services.
+
+Secondary motivation was to code-generate the micro-service Data-Transfer-Object domain objects
+ from JSon schema.  Some of these DTO objects do not match the internal micro-service domain
+  nor the GraphQL domain exactly.  This was intentional, to add a little object mapping spice into the mix.
+
+Code has been designed to create scenarios of interest and aid my personal learning.
+Not necessarily best practice nor production quality.
+
+
+=== Understanding GraphQL Server
+
+GraphQL server can be found in the `research-graphql-server` module.
+
+While it is built to run alongside separate micro-services you can see all the GraphQL
+related code in this module.  There is also a package of unit tests with mocked versions of the other micro-services for testing the basic scenarios.
+
+====== GraphQL Schema
+
+GraphQL requires a GraphQL schema to be defined, necessary to make all the query
+features possible.
+
+A GraphQL schema is a __fully defined object graph__, which may be comprised of
+many data domains, aggregations, and linked data from different sources.
+
+* See `me.roybailey.springboot.graphql.domain.manual` package for handcrafted boilerplate GraphQL schema definition
+* See `me.roybailey.springboot.graphql.domain.annotations` package for object and annotation defined GraphQL schema definition
+
+====== GraphQL Schema attached Data Fetchers
+
+Any GraphQL schema field can have a _data fetcher_ associated.
+A data fetcher will be triggered to resolve the data itself at that point in the GraphQL query when it references that schema field.
+
+Objects returned from a _data fetcher_ will automatically map to the GraphQL schema where the fields naturally match by name and type.
+Otherwise nested data fetchers or revolvers can be used to provide complex mappings.
+
+* See `me.roybailey.springboot.graphql.fetchers` package for sample data fetchers
+
+====== GraphQL Requests
+
+GraphQL requests expect a GraphQL defined `query` string.  See the links at the bottom for useful resources to help learn and understand the GraphQL query language format and capabilities.
+
+The GraphQL server is encouraged to execute queries concurrently as these should be read-only queries with no side affects.
+
+GraphQL requests _may_ have a GraphQL defined `mutation` string.  Same format as a `query` string but with implementations that change data state.  Mutations are expected to be executed sequencially and should return the altered data.
+
+* See `me.roybailey.springboot.graphql.GraphQLRequest`
+
+====== GraphQL Responses
+
+GraphQL response is expected to have a `data` object.  The shape and definition of the data will be primarily based on the GraphQL query structure along with any valid schema fields.
+
+GraphQL response _may_ have an array of `errors`.
+Multiple errors can be returned due to partial query execution success.
+i.e. a mix of partial data and errors may be returned where some data fetching succeeded and others failed.
+
+* See `me.roybailey.springboot.graphql.GraphQLResponse`
+
+====== GraphQL Server
+
+The GraphQL query processing engine is provided by https://github.com/graphql-java/graphql-java[GraphQL-Java]
+
+This allows you to primarily focus on defining your schema mapping and data fetchers.  In production you might need to customize the execution settings (thread pool strategy etc).
+
+You can pass a context object into the execution engine, which can be accessed from your data fetchers.  This way your authentication details could be passed from a REST endpoint to Data Fetchers so they can make authenticated downstream requests on behalf of the caller.
+
+* See `me.roybailey.springboot.graphql.GraphQLServer` for GraphQL execution service
+* See `me.roybailey.springboot.configuration.GraphQLConfiguration` for wiring of Schema (`manual` or `annotations` based on config) and execution service
+
+====== GraphQL REST Controller
+
+Usually the GraphQL service is exposed via REST.  A single endpoint that takes the GraphQL request payload (query, mutation) and returns the GraphQL response (data, errors) built from the execution result.
+
+* See `me.roybailey.springboot.controller.GraphQLController` for simple REST endpoint
+
+====== GraphQL Unit Tests
+
+Since GraphQL queries are intended to be _'client defined'_ and flexible in how to name response data you typically define your own limited request and response data fields.  This is good because it means you only ever ask for what you need and the server can be efficient in data fetching.  It also helps when the server needs to evolve the schema as the impact of changes can be more easily tracked than a traditional 'all you can eat' response.
+
+* See `me.roybailey.springboot.graphql` package of tests that demonstrate various GraphQL requests
+* See `me.roybailey.springboot.ApplicationTestConfiguration.java` for the mocked data of external micro-services
+
+_Note: Each test defines its own API interface and response object using Open Feign, though all requests are serviced through the same REST endpoint.  This is just a clean way to handle the client side object mapping from json_
+
+
+== Getting Started
+
+run `mvn clean install` to build application and all modules.
+
+==== `UserServiceApplication`
+
+* see `http://localhost:8091/user-api/v1/user` to check it's working
+* Uses in-memory cache of User records
+* JSon DTO Schema uses different field names to JPA and GraphQL, showing field mappings at work
+* Includes Date object in API model, not natively supported by GraphQL so ends up as JSon schema date+time the GraphQL String
+
+==== `ProductServiceApplication`
+
+* see `http://localhost:8092/product-api/v1/product` to check it's working
+* see `http://localhost:8092/h2/console` for H2 database console
+* Uses simple H2 in-memory database, standard JPA and database `import.sql`
+* Includes 'category' String array in API model (mapping from many-to-many table relationship)
+
+==== `OrderServiceApplication`
+
+* see `http://localhost:8093/order-api/v1/order` to check it's working
+* see `http://localhost:8093/h2/console` for H2 database console
+* Uses simple H2 in-memory database, standard JPA and database `import.sql` with Order and OrderItems
+* Includes Enum in API model, shows this in JSon schema but GraphQL as String only
+* Only stores/returns identifiers of User and Product data from other micro-services (used to show nested data fetching by GraphQL server)
+
+==== `GraphQLServerApplication`
+
+* Chrome extension https://chrome.google.com/webstore/detail/graphiql-feen/mcbfdonlkfpbfdpimkjilhdneikhfklp[GraphiQL Feen] used for testing (should work with any GraphiQL tool).
+* `http://localhost:8080/graphql` if you want to use a REST client
+
+====== GraphQL Query Samples
+
+* Basic query for collections
+
+```
+# query for all products and users, returning subset of fields
+{
+  products {
+    productId
+    name
+    price
+  }
+  users {
+    userId
+    firstname
+    lastname
+    email
+  }
+}
+# try adding category to returned fields for product list
+```
+
+* Basic query with arguments to get specific records
+
+```
+# query a specific product and user with their identifier
+# arguments much be declared in the schema
+{
+  product(productId: "1") {
+    productId
+    name
+  }
+  user(userId: "U01") {
+    firstname
+    lastname
+    email
+  }
+}
+```
+
+* Basic query with aliases to request multiple records of the same type
+
+```
+# aliases help you give client side uniqueness and meaning to data
+{
+  firstProduct: product(productId: "1") {
+    name
+    price
+  }
+  secondProduct: product(productId: "2") {
+    name
+    price
+  }
+}
+```
+
+* Basic query demonstrating fragments
+
+```
+# fragments help you avoid repetition of data fields
+{
+  desk: product(productId: "1") {
+    ...productInfo
+    category
+  },
+  chair: product(productId: "2") {
+    ...productInfo
+  },
+  table: product(productId: "3") {
+    ...productInfo
+  }
+}
+# fragment used to define common fields (notice you can mix-n-match)
+fragment productInfo on ProductDto {
+  productId,
+  name,
+  price
+}
+```
+
+* Basic query demonstrating variables
+
+```
+# variables help you pass in dynamic values without manipulating the query
+query getFewItems($varProductId: String!, $varUserId: String!) {
+  product(productId: $varProductId) {
+    productId
+    name
+  }
+  user(userId: $varUserId) {
+    firstname
+    lastname
+    email
+  }
+}
+# these variables need to go in the graphiql variable box as valid json
+variables {
+  "varProductId": "2",
+  "varUserId": "U01"
+}
+```
+
+* Query demonstrating nested data fetching (product & user records nested fetching in GraphQL)
+
+```
+# nested data fetching allows you to fetch some data and use the response
+# to go fetch some more data
+# (e.g. Order-Service resolves a userId which can then be used by User-Service to resolve user fields)
+{
+  orders {
+    userId
+    user {
+      email
+    }
+    status
+    items {
+      productId
+      product {
+        name
+      }
+      quantity
+    }
+  }
+}
+```
+
+* Basic mutations to create/update/delete records
+
+```
+# mutations allow you to perform write operations through your GraphQL server
+# executed sequentially and returning the altered data you wish to receive
+mutation {
+  test1: createProduct(name: "test1", price: 1.95) {
+    name
+    price
+  }
+  test2: createProductObject(product: {name: "test2", price: 10.99}) {
+    name
+    price
+  }
+}
+```
+
+
+==== Many Thanks
+
+* http://graphql.org/[GraphQL]
+* http://graphql.org/learn/[Learn GraphQL]
+* https://github.com/graphql-java/graphql-java[GraphQL-Java]
+* https://github.com/graphql-java/graphql-java-annotations[GraphQL-Java-Annotations]
+* https://chrome.google.com/webstore/detail/graphiql-feen/mcbfdonlkfpbfdpimkjilhdneikhfklp[GraphiQL Feen Chrome Extension]
+* https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference[JSon schema Java Code Generator]
+* https://projectlombok.org/[Lombok - Java Boiler Plate Code Generator]
+* http://modelmapper.org/[ModelMapper.org - Java Model Mapper]
+* https://github.com/OpenFeign/feign[Open Feign - Java REST client framework]

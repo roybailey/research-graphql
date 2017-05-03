@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "A Product following the convention of http://microformats.org/wiki/h-product",
+    "type": "object",
+    "javaName": "ProductDto",
+    "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "brand": { "type": "string" },
+        "category": {
+            "type": "array",
+            "items" : {
+                "type" : "string"
+            }
+        },
+        "description": { "type": "string" },
+        "price": {
+            "type": "number",
+             "javaType" : "java.math.BigDecimal"
+        }
+    },
+    "required": ["name", "brand", "price"]
+}

@@ -1,0 +1,13 @@
+# external micro-service base URLs
+spring:
+  application:
+    name: research-graphql-server
+server:
+  port: 8080
+data-source:
+  urlUserService: http://localhost:8091
+  urlProductService: http://localhost:8092
+  urlOrderService: http://localhost:8093
+# graphql.schema implementations 'manual' or 'annotations'
+graphql:
+  schema: manual

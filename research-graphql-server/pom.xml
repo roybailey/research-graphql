@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>research-graphql-server</artifactId>
+    <packaging>jar</packaging>
+
+    <name>research-graphql-server</name>
+    <description>Simple GraphQL server for serving and aggregating other RESTful API data</description>
+
+    <parent>
+        <groupId>me.roybailey</groupId>
+        <artifactId>research-graphql</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <graphql-java.version>2.4.0</graphql-java.version>
+        <graphql-java.annotations.version>0.13.1</graphql-java.annotations.version>
+        <graphql-spring-boot-starter.version>3.1.0</graphql-spring-boot-starter.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- JSon Schema -->
+        <dependency>
+            <groupId>me.roybailey</groupId>
+            <artifactId>research-graphql-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- GraphQL -->
+        <!--
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>${graphql-spring-boot-starter.version}</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java</artifactId>
+            <version>${graphql-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-annotations</artifactId>
+            <version>${graphql-java.annotations.version}</version>
+        </dependency>
+
+        <!-- to embed GraphiQL tool -->
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphiql-spring-boot-starter</artifactId>
+            <version>${graphql-spring-boot-starter.version}</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
