@@ -88,19 +88,15 @@ public class GraphQLJavaToolsTest {
     public void testGraphQlJavaToolsSchema() {
 
         // My application class
-        try {
-            SchemaParser file = SchemaParser.newParser()
-                    .file("sample-schema.graphql")
-                    .resolvers(new Query(), new BookResolver())
-                    .dictionary(Book.class, Author.class)
-                    .build();
+        SchemaParser file = SchemaParser.newParser()
+                .file("sample-schema.graphql")
+                .resolvers(new Query(), new BookResolver())
+                .dictionary(Book.class, Author.class)
+                .build();
 
-            GraphQL graphQL = GraphQL.newGraphQL(file.makeExecutableSchema()).build();
+        GraphQL graphQL = GraphQL.newGraphQL(file.makeExecutableSchema()).build();
 
-            Map<String, Object> result = graphQL.execute("{books {id}}").getData();
-            System.out.println(result);
-        } catch (Throwable err) {
-            log.error("No idea why this doesn't work\n", err);
-        }
+        Map<String, Object> result = graphQL.execute("{books {id}}").getData();
+        System.out.println(result);
     }
 }
