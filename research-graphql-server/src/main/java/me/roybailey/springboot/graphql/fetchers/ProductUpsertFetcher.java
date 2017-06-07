@@ -4,10 +4,7 @@ import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.extern.slf4j.Slf4j;
 import me.roybailey.data.schema.ProductDto;
-import me.roybailey.springboot.ApplicationContextProvider;
 import me.roybailey.springboot.service.ProductAdaptor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -20,14 +17,12 @@ import java.util.function.Function;
  * Instantiated by graphql-java library so we need to hook into Spring to get other beans.
  */
 @Slf4j
-@Component
 public class ProductUpsertFetcher implements DataFetcher<ProductDto> {
 
     ProductAdaptor productAdaptor;
 
-    public ProductUpsertFetcher() {
-        ApplicationContext context = ApplicationContextProvider.getApplicationContext();
-        productAdaptor = context.getBean(ProductAdaptor.class);
+    public ProductUpsertFetcher(ProductAdaptor productAdaptor) {
+        this.productAdaptor = productAdaptor;
     }
 
     public static final List<String> EMPTY_CATEGORIES = new ArrayList<>();

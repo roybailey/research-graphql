@@ -1,9 +1,5 @@
 package me.roybailey.springboot.configuration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import graphql.GraphQL;
 import graphql.annotations.GraphQLAnnotations;
 import graphql.schema.GraphQLObjectType;
@@ -11,12 +7,11 @@ import graphql.schema.GraphQLSchema;
 import lombok.extern.slf4j.Slf4j;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLMutationSchema;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLQuerySchema;
-import me.roybailey.springboot.graphql.domain.manual.ManualGraphQLMutationSchema;
-import me.roybailey.springboot.graphql.domain.manual.ManualGraphQLQuerySchema;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import static graphql.schema.GraphQLSchema.newSchema;
 
@@ -28,15 +23,13 @@ public class GraphQLConfiguration {
     @Value("${graphql.schema:manual}")
     String schemaType;
 
-    @Bean
-    @Primary
-    ObjectMapper getJacksonMapper() {
-        return new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .enable(SerializationFeature.INDENT_OUTPUT)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-    }
+    @Autowired
+    @Qualifier("QueryType")
+    GraphQLObjectType queryType;
+
+    @Autowired
+    @Qualifier("MutationType")
+    GraphQLObjectType mutationType;
 
     @Bean
     public GraphQLSchema getGraphQLSchema() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
@@ -52,8 +45,8 @@ public class GraphQLConfiguration {
             case "manual":
             default:
                 // this uses manual schema definition (boilerplate heavy)
-                queryObject = ManualGraphQLQuerySchema.queryType;
-                mutationObject = ManualGraphQLMutationSchema.mutationType;
+                queryObject = queryType;
+                mutationObject = mutationType;
                 break;
         }
         log.info("queryObject={}", queryObject);
