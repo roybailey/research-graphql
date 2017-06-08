@@ -1,6 +1,7 @@
 package me.roybailey.springboot.graphql.domain.annotation;
 
 import graphql.annotations.GraphQLField;
+import graphql.annotations.GraphQLName;
 import graphql.annotations.GraphQLType;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import java.util.List;
 
 @Data
 @GraphQLType
+@GraphQLName("InputProductType")
 public class InputProductQL {
 
     @GraphQLField

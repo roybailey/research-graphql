@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 /**
- * FAILED ATTEMPT TO GET graphql-java-tools TO GENERATE WORKING SCHEMA!
+ * graphql-java-tools example schema
  */
 @Slf4j
 public class GraphQLJavaToolsTest {
@@ -48,11 +48,6 @@ public class GraphQLJavaToolsTest {
             mapAuthors.put(3, Author.builder().id(3).name("Carl").build());
         }
 
-        /**
-         * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         * ANY OF THESE CAUSES JVM EXCEPTION
-         * java.lang.IncompatibleClassChangeError: Found interface graphql.schema.DataFetchingEnvironment, but class was expected
-         */
         public Author author(int authorId) {
             return mapAuthors.get(authorId);
         }
@@ -63,9 +58,6 @@ public class GraphQLJavaToolsTest {
             Book book = dfe.getSource();
             return mapAuthors.get(book.getAuthorId());
         }
-        /**
-         * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-         */
     }
 
     private static class Query implements GraphQLRootResolver {

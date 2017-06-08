@@ -5,6 +5,8 @@ import graphql.schema.DataFetchingEnvironment;
 import lombok.extern.slf4j.Slf4j;
 import me.roybailey.data.schema.ProductDto;
 import me.roybailey.springboot.service.ProductAdaptor;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.function.Function;
  * Instantiated by graphql-java library so we need to hook into Spring to get other beans.
  */
 @Slf4j
-public class ProductUpsertFetcher implements DataFetcher<ProductDto> {
+public class ProductUpsertFetcher implements DataFetcher<ProductDto>, ApplicationListener<ContextRefreshedEvent> {
 
     ProductAdaptor productAdaptor;
 
@@ -60,5 +62,14 @@ public class ProductUpsertFetcher implements DataFetcher<ProductDto> {
         ProductDto savedProduct = productAdaptor.upsertProduct(newProduct);
         log.info("saved new product={}", savedProduct);
         return savedProduct;
+    }
+
+    // only needed for annotations schema as it instantiates fetchers outside spring
+    public ProductUpsertFetcher() {
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        productAdaptor = contextRefreshedEvent.getApplicationContext().getBean(ProductAdaptor.class);
     }
 }
