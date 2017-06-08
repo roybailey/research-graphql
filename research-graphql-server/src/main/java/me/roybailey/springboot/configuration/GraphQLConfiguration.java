@@ -12,15 +12,12 @@ import me.roybailey.data.schema.ProductDto;
 import me.roybailey.data.schema.UserDto;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLMutationSchema;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLQuerySchema;
-import me.roybailey.springboot.graphql.domain.schema.GraphQLSchemaRootResolver;
+import me.roybailey.springboot.graphql.domain.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.awt.print.Book;
-import java.util.Map;
 
 import static graphql.schema.GraphQLSchema.newSchema;
 
@@ -41,7 +38,22 @@ public class GraphQLConfiguration {
     GraphQLObjectType mutationType;
 
     @Autowired
-    GraphQLSchemaRootResolver graphQLSchemaRootResolver;
+    Query queryRootResolver;
+
+    @Autowired
+    Mutation mutationRootResolver;
+
+    @Autowired
+    ProductResolver productResolver;
+
+    @Autowired
+    UserResolver userResolver;
+
+    @Autowired
+    OrderResolver orderResolver;
+
+    @Autowired
+    OrderItemResolver orderItemResolver;
 
     @Bean
     public GraphQLSchema getGraphQLSchema() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
@@ -62,9 +74,17 @@ public class GraphQLConfiguration {
             case "schema":
                 // this uses combination of schema file and resolvers...
                 SchemaParser file = SchemaParser.newParser()
-                        .file("sample-schema.graphql")
-                        .resolvers(graphQLSchemaRootResolver)
+                        .file("schema.graphql")
+                        .resolvers(
+                                queryRootResolver,
+                                mutationRootResolver,
+                                productResolver,
+                                userResolver,
+                                orderResolver,
+                                orderItemResolver
+                        )
                         .dictionary(
+                                ProductDtoInput.class,
                                 ProductDto.class,
                                 UserDto.class,
                                 OrderDto.class,
@@ -72,7 +92,7 @@ public class GraphQLConfiguration {
                         )
                         .build();
 
-                file.makeExecutableSchema();
+                schema = file.makeExecutableSchema();
                 break;
 
             case "manual":

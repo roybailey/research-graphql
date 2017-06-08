@@ -37,7 +37,7 @@ public class ManualGraphQLMutationSchema {
     @Qualifier("InputProductType")
     GraphQLInputType getInputProductType() {
         return newInputObject()
-                .name("InputProductDto")
+                .name("ProductDtoInput")
                 .field(newInputObjectField()
                         .name("productId")
                         .type(GraphQLID))
