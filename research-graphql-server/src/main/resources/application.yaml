@@ -8,6 +8,6 @@ data-source:
   urlUserService: http://localhost:8091
   urlProductService: http://localhost:8092
   urlOrderService: http://localhost:8093
-# graphql.schema implementations 'manual' or 'annotations'
+# graphql.schema implementations 'manual' or 'annotations' or 'schema'
 graphql:
   schema: manual

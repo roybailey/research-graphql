@@ -88,8 +88,10 @@ public class GraphQLMutationTest extends AbstractControllerTestCase {
         softly.then(createdProduct)
                 .isNotNull()
                 .hasNoNullFieldsOrPropertiesExcept("brand", "description", "category")
-                .hasFieldOrPropertyWithValue("name", "test1")
-                .hasFieldOrPropertyWithValue("price", BigDecimal.valueOf(5.50));
+                .hasFieldOrPropertyWithValue("name", "test1");
+        // convert BigDecimals to doubles to avoid failure from training zeros
+        softly.then(createdProduct.getPrice().doubleValue())
+                .isEqualTo(BigDecimal.valueOf(5.50).doubleValue());
 
         // delete our created product using productId returned from creation...
         GraphQLResponse<MutationResult> deleteResponse =

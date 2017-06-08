@@ -34,7 +34,7 @@
         <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
         <swagger.version>2.6.1</swagger.version>
         <junit.version>4.12</junit.version>
-        <assertj.version>3.6.1</assertj.version>
+        <assertj.version>3.8.0</assertj.version>
         <maven.compiler.version>3.6.1</maven.compiler.version>
     </properties>
 

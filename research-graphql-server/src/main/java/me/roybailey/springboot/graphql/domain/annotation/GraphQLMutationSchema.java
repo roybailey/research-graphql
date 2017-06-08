@@ -25,11 +25,11 @@ public class GraphQLMutationSchema {
         return null;
     }
 
-    @GraphQLField
-    @GraphQLDataFetcher(ProductUpsertFetcher.class)
-    public ProductQL createProductObject(@GraphQLName("product") InputProductQL product) {
-        return null;
-    }
+//    @GraphQLField
+//    @GraphQLDataFetcher(ProductUpsertFetcher.class)
+//    public ProductQL createProductObject(@GraphQLName("product") InputProductQL product) {
+//        return null;
+//    }
 
     @GraphQLField
     @GraphQLDataFetcher(ProductUpsertFetcher.class)

@@ -1,22 +1,23 @@
 package me.roybailey.springboot.configuration;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.coxautodev.graphql.tools.SchemaParser;
 import graphql.GraphQL;
 import graphql.annotations.GraphQLAnnotations;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import lombok.extern.slf4j.Slf4j;
+import me.roybailey.data.schema.OrderDto;
+import me.roybailey.data.schema.OrderItemDto;
+import me.roybailey.data.schema.ProductDto;
+import me.roybailey.data.schema.UserDto;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLMutationSchema;
 import me.roybailey.springboot.graphql.domain.annotation.GraphQLQuerySchema;
-import me.roybailey.springboot.graphql.domain.manual.ManualGraphQLMutationSchema;
-import me.roybailey.springboot.graphql.domain.manual.ManualGraphQLQuerySchema;
+import me.roybailey.springboot.graphql.domain.schema.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 
 import static graphql.schema.GraphQLSchema.newSchema;
 
@@ -28,18 +29,35 @@ public class GraphQLConfiguration {
     @Value("${graphql.schema:manual}")
     String schemaType;
 
-    @Bean
-    @Primary
-    ObjectMapper getJacksonMapper() {
-        return new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .enable(SerializationFeature.INDENT_OUTPUT)
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-    }
+    @Autowired
+    @Qualifier("QueryType")
+    GraphQLObjectType queryType;
+
+    @Autowired
+    @Qualifier("MutationType")
+    GraphQLObjectType mutationType;
+
+    @Autowired
+    Query queryRootResolver;
+
+    @Autowired
+    Mutation mutationRootResolver;
+
+    @Autowired
+    ProductResolver productResolver;
+
+    @Autowired
+    UserResolver userResolver;
+
+    @Autowired
+    OrderResolver orderResolver;
+
+    @Autowired
+    OrderItemResolver orderItemResolver;
 
     @Bean
     public GraphQLSchema getGraphQLSchema() throws IllegalAccessException, NoSuchMethodException, InstantiationException {
+        GraphQLSchema schema = null;
         GraphQLObjectType queryObject = null;
         GraphQLObjectType mutationObject = null;
         switch (schemaType) {
@@ -47,21 +65,49 @@ public class GraphQLConfiguration {
                 // this uses annotations over objects to define graphql schema (some limitations)
                 queryObject = GraphQLAnnotations.object(GraphQLQuerySchema.class);
                 mutationObject = GraphQLAnnotations.object(GraphQLMutationSchema.class);
+                schema = newSchema()
+                        .query(queryObject)
+                        .mutation(mutationObject)
+                        .build();
+                break;
+
+            case "schema":
+                // this uses combination of schema file and resolvers...
+                SchemaParser file = SchemaParser.newParser()
+                        .file("schema.graphql")
+                        .resolvers(
+                                queryRootResolver,
+                                mutationRootResolver,
+                                productResolver,
+                                userResolver,
+                                orderResolver,
+                                orderItemResolver
+                        )
+                        .dictionary(
+                                ProductDtoInput.class,
+                                ProductDto.class,
+                                UserDto.class,
+                                OrderDto.class,
+                                OrderItemDto.class
+                        )
+                        .build();
+
+                schema = file.makeExecutableSchema();
                 break;
 
             case "manual":
             default:
                 // this uses manual schema definition (boilerplate heavy)
-                queryObject = ManualGraphQLQuerySchema.queryType;
-                mutationObject = ManualGraphQLMutationSchema.mutationType;
+                queryObject = queryType;
+                mutationObject = mutationType;
+                schema = newSchema()
+                        .query(queryObject)
+                        .mutation(mutationObject)
+                        .build();
                 break;
         }
-        log.info("queryObject={}", queryObject);
-        log.info("mutationObject={}", mutationObject);
-        return newSchema()
-                .query(queryObject)
-                .mutation(mutationObject)
-                .build();
+        log.info("schema={}", schema);
+        return schema;
     }
 
     @Bean
