@@ -7,6 +7,7 @@ import me.roybailey.data.schema.ProductDto;
 import me.roybailey.springboot.service.ProductAdaptor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * Instantiated by graphql-java library so we need to hook into Spring to get other beans.
  */
 @Slf4j
+@Service
 public class ProductListFetcher implements DataFetcher<List<ProductDto>>, ApplicationListener<ContextRefreshedEvent> {
 
     ProductAdaptor productAdaptor;

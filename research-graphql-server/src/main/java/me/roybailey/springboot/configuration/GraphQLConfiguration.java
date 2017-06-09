@@ -2,7 +2,6 @@ package me.roybailey.springboot.configuration;
 
 import com.coxautodev.graphql.tools.SchemaParser;
 import graphql.GraphQL;
-import graphql.annotations.GraphQLAnnotations;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLSchema;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +9,6 @@ import me.roybailey.data.schema.OrderDto;
 import me.roybailey.data.schema.OrderItemDto;
 import me.roybailey.data.schema.ProductDto;
 import me.roybailey.data.schema.UserDto;
-import me.roybailey.springboot.graphql.domain.annotation.GraphQLMutationSchema;
-import me.roybailey.springboot.graphql.domain.annotation.GraphQLQuerySchema;
 import me.roybailey.springboot.graphql.domain.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -60,16 +57,9 @@ public class GraphQLConfiguration {
         GraphQLSchema schema = null;
         GraphQLObjectType queryObject = null;
         GraphQLObjectType mutationObject = null;
+        schemaType = System.getProperty("graphql.schema", schemaType);
+        log.info("Loading GraphQL schema type " + schemaType.toUpperCase());
         switch (schemaType) {
-            case "annotations":
-                // this uses annotations over objects to define graphql schema (some limitations)
-                queryObject = GraphQLAnnotations.object(GraphQLQuerySchema.class);
-                mutationObject = GraphQLAnnotations.object(GraphQLMutationSchema.class);
-                schema = newSchema()
-                        .query(queryObject)
-                        .mutation(mutationObject)
-                        .build();
-                break;
 
             case "schema":
                 // this uses combination of schema file and resolvers...

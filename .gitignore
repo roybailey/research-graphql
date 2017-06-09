@@ -21,6 +21,7 @@ build/
 target/
 node_modules/
 .gradle/
+**/pom.xml.versionsBackup
 
 neo4j-spring-react-service/src/main/resources/static/dist/*
 neo4j-spring-react-service/src/main/resources/templates/index.html

@@ -31,7 +31,7 @@ A GraphQL schema is a __fully defined object graph__, which may be comprised of
 many data domains, aggregations, and linked data from different sources.
 
 * See `me.roybailey.springboot.graphql.domain.manual` package for handcrafted boilerplate GraphQL schema definition
-* See `me.roybailey.springboot.graphql.domain.annotations` package for object and annotation defined GraphQL schema definition
+* See `me.roybailey.springboot.graphql.domain.schema` package for using graphql-java-tools to define GraphQL schema definition (file) and resolvers
 
 ====== GraphQL Schema attached Data Fetchers
 
@@ -72,7 +72,7 @@ This allows you to primarily focus on defining your schema mapping and data fetc
 You can pass a context object into the execution engine, which can be accessed from your data fetchers.  This way your authentication details could be passed from a REST endpoint to Data Fetchers so they can make authenticated downstream requests on behalf of the caller.
 
 * See `me.roybailey.springboot.graphql.GraphQLServer` for GraphQL execution service
-* See `me.roybailey.springboot.configuration.GraphQLConfiguration` for wiring of Schema (`manual` or `annotations` based on config) and execution service
+* See `me.roybailey.springboot.configuration.GraphQLConfiguration` for wiring of Schema (`manual` or `schema` based on config) and execution service
 
 ====== GraphQL REST Controller
 
@@ -270,6 +270,7 @@ mutation {
 * http://graphql.org/[GraphQL]
 * http://graphql.org/learn/[Learn GraphQL]
 * https://github.com/graphql-java/graphql-java[GraphQL-Java]
+* https://github.com/graphql-java/graphql-java-tools[GraphQL-Java-Tools]
 * https://github.com/graphql-java/graphql-java-annotations[GraphQL-Java-Annotations]
 * https://chrome.google.com/webstore/detail/graphiql-feen/mcbfdonlkfpbfdpimkjilhdneikhfklp[GraphiQL Feen Chrome Extension]
 * https://github.com/joelittlejohn/jsonschema2pojo/wiki/Reference[JSon schema Java Code Generator]
