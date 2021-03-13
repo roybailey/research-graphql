@@ -9,6 +9,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class GraphQLService {
         ExecutionResult executionResult = graphQL.execute(
                 request.getQuery(),
                 context,
-                getArgumentsFromVariableString(request.getVariables())
+                (request.getVariables() == null)? Collections.emptyMap() : request.getVariables()
         );
         if (executionResult.getErrors().size() > 0) {
             log.error("GraphQL query error: " + executionResult.getErrors());

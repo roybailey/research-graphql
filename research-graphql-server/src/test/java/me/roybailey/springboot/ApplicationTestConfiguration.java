@@ -92,10 +92,10 @@ public class ApplicationTestConfiguration {
         when(mock.getAllProducts())
                 .thenReturn(new ArrayList<>(mapProducts.values()));
         when(mock.getProduct(anyString()))
-                .then((inv) -> mapProducts.get(inv.getArgumentAt(0, String.class)));
+                .then((inv) -> mapProducts.get(inv.getArgument(0, String.class)));
         when(mock.upsertProduct(anyObject()))
                 .then((inv) -> {
-                    ProductDto product = inv.getArgumentAt(0, ProductDto.class);
+                    ProductDto product = inv.getArgument(0, ProductDto.class);
                     ProductDto newProduct = new ModelMapper().map(product, ProductDto.class);
                     if(newProduct.getId()==null)
                     newProduct.setId(UUID.randomUUID().toString());
@@ -105,7 +105,7 @@ public class ApplicationTestConfiguration {
                 });
         when(mock.deleteProduct(anyString()))
                 .then((inv) -> {
-                    String productId = inv.getArgumentAt(0, String.class);
+                    String productId = inv.getArgument(0, String.class);
                     ProductDto removedProduct = mapProducts.remove(productId);
                     log.info("deleteProduct({}) : {}", productId, removedProduct);
                     return removedProduct;
@@ -120,7 +120,7 @@ public class ApplicationTestConfiguration {
         when(mock.getAllUsers())
                 .thenReturn(new ArrayList<>(mapUsers.values()));
         when(mock.getUser(anyString()))
-                .then((inv) -> mapUsers.get(inv.getArgumentAt(0, String.class)));
+                .then((inv) -> mapUsers.get(inv.getArgument(0, String.class)));
         return mock;
     }
 }

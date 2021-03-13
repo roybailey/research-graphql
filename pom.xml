@@ -5,7 +5,7 @@
 
     <groupId>me.roybailey</groupId>
     <artifactId>research-graphql</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>research-graphql</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.3.RELEASE</version>
+        <version>2.4.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -28,10 +28,10 @@
         <jackson.version>2.11.1</jackson.version>
         <json-path.version>2.2.0</json-path.version>
         <feign.version>9.4.0</feign.version>
-        <lombok.version>1.16.16</lombok.version>
+        <lombok.version>1.18.18</lombok.version>
         <modelmapper.version>0.7.7</modelmapper.version>
-        <spring.version>4.3.4.RELEASE</spring.version>
-        <spring.boot.version>1.4.2.RELEASE</spring.boot.version>
+        <spring.version>5.3.4</spring.version>
+        <spring.boot.version>2.4.3</spring.boot.version>
         <swagger.version>2.6.1</swagger.version>
         <junit.version>4.12</junit.version>
         <assertj.version>3.8.0</assertj.version>
@@ -107,15 +107,15 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-hateoas</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
         <dependency>
@@ -157,6 +157,13 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 

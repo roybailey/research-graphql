@@ -1,7 +1,7 @@
 package me.roybailey.springboot.graphql;
 
+import com.coxautodev.graphql.tools.GraphQLQueryResolver;
 import com.coxautodev.graphql.tools.GraphQLResolver;
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
 import com.coxautodev.graphql.tools.SchemaParser;
 import graphql.GraphQL;
 import graphql.schema.DataFetchingEnvironment;
@@ -37,7 +37,7 @@ public class GraphQLJavaToolsTest {
         private String name;
     }
 
-    class BookResolver implements GraphQLResolver<Book> /* This class is a resolver for the Book "Data Class" */ {
+    static class BookResolver implements GraphQLResolver<Book> /* This class is a resolver for the Book "Data Class" */ {
 
         Map<Integer, Author> mapAuthors;
 
@@ -60,7 +60,7 @@ public class GraphQLJavaToolsTest {
         }
     }
 
-    private static class Query implements GraphQLRootResolver {
+    private static class Query implements GraphQLQueryResolver {
 
         Map<Integer, Book> mapBooks;
 

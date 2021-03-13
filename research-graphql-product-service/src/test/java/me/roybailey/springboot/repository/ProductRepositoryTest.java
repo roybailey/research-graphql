@@ -100,7 +100,7 @@ public class ProductRepositoryTest {
                 .hasFieldOrPropertyWithValue("description", savedProduct.getDescription());
 
         softly.then(loadAllProducts()).hasSize(count+1);
-        productRepository.delete(updatedProduct.getId());
+        productRepository.deleteById(updatedProduct.getId());
         softly.then(loadAllProducts()).hasSize(count);
     }
 

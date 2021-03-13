@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -25,10 +28,10 @@ public class GraphQLVariablesTest extends AbstractControllerTestCase {
             "  }" +
             "}";
 
-    public static final String VARIABLES = "{" +
-            "  \"varUserId\": \"U1\"," +
-            "  \"varProductId\": \"P2\"" +
-            "}";
+    Map<String, Object> VARIABLES  = new HashMap<String, Object>() {{
+        put("varUserId", "U1");
+        put("varProductId", "P2");
+    }};
 
     @Data
     private static class ProductResult {

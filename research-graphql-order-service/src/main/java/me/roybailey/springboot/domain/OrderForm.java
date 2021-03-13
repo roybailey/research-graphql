@@ -18,7 +18,7 @@ import static javax.persistence.CascadeType.ALL;
 public class OrderForm {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private String id;
 
     private String userId;

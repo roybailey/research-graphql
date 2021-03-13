@@ -1,6 +1,6 @@
 package me.roybailey.springboot.graphql.domain.schema;
 
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import com.coxautodev.graphql.tools.GraphQLResolver;
 import me.roybailey.data.schema.OrderDto;
 import me.roybailey.data.schema.ProductDto;
 import me.roybailey.data.schema.UserDto;
@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @Service
-public class Query implements GraphQLRootResolver {
+public class Query implements GraphQLResolver {
 
     @Autowired
     ProductAdaptor productAdaptor;

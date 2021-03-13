@@ -39,7 +39,7 @@ public class OrderController {
     @ResponseBody
     @GetMapping(path = "/order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderDto getOrder(@PathVariable(name = "id") String id) {
-        OrderForm order = OrderRepository.findOne(id);
+        OrderForm order = OrderRepository.findById(id).orElse(null);
         log.info("getOrder({}) : {}", id, order);
         return orderMapper.toOrderDto(order);
     }
@@ -59,8 +59,8 @@ public class OrderController {
     @ResponseBody
     @DeleteMapping(path = "/order/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public OrderDto deleteOrder(@PathVariable(name = "id") String id) {
-        OrderForm order = OrderRepository.findOne(id);
-        OrderRepository.delete(id);
+        OrderForm order = OrderRepository.findById(id).orElse(null);
+        OrderRepository.deleteById(id);
         log.info("deleteOrder({}) : {}", id, order);
         return orderMapper.toOrderDto(order);
     }

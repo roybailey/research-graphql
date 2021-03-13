@@ -12,12 +12,12 @@
     <parent>
         <groupId>me.roybailey</groupId>
         <artifactId>research-graphql</artifactId>
-        <version>0.2.0-SNAPSHOT</version>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <graphql-java.version>3.0.0</graphql-java.version>
-        <graphql-java-tools.version>3.0.2</graphql-java-tools.version>
+        <graphql-java.version>14.1</graphql-java.version>
+        <graphql-java-tools.version>5.2.4</graphql-java-tools.version>
     </properties>
 
     <dependencies>
