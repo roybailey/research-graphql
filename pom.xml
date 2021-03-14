@@ -175,6 +175,8 @@
         <module>research-graphql-product-service</module>
         <module>research-graphql-order-service</module>
         <module>research-graphql-server</module>
+        <module>research-graphql-server-kickstart</module>
+        <module>research-graphql-server-kotlin</module>
     </modules>
 
     <build>

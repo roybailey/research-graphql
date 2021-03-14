@@ -1,0 +1,58 @@
+type Query {
+    products: [ProductDto!]
+    users: [UserDto!]
+    orders: [OrderDto!]
+    product(productId: String!) : ProductDto
+    user(userId: String!) : UserDto
+}
+
+type Mutation {
+    createProduct(name: String, price: BigDecimal): ProductDto
+    createProductObject(product: ProductDtoInput): ProductDto
+    deleteProduct(productId: String): ProductDto
+}
+
+input ProductDtoInput {
+    name: String!
+    brand: String
+    description: String
+    category: [String]
+    price: BigDecimal!
+}
+
+type ProductDto {
+    productId: String!
+    name: String!
+    brand: String!
+    description: String!
+    category: [String]
+    price: BigDecimal
+}
+
+type UserDto {
+    userId: String!
+    email: String!
+    title: String!
+    firstname: String!
+    lastname: String!
+}
+
+enum OrderStatus {
+    SUBMITTED,
+    PAYED,
+    DISPATCHED
+}
+
+type OrderDto {
+    id: String!
+    userId: String!
+    user: UserDto!
+    status: OrderStatus!
+    items: [OrderItemDto]
+}
+
+type OrderItemDto {
+    productId: String!
+    quantity: Int!
+    product: ProductDto!
+}

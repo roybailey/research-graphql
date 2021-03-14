@@ -1,0 +1,41 @@
+# external micro-service base URLs
+spring:
+  application:
+    name: research-graphql-server
+
+server:
+  port: 8080
+
+data-source:
+  urlUserService: http://localhost:8091
+  urlProductService: http://localhost:8092
+  urlOrderService: http://localhost:8093
+
+# graphql.schema implementations 'manual' or 'annotations' or 'schema'
+graphql:
+  schema: manual
+
+graphiql:
+  mapping: /graphiql
+  endpoint:
+    graphql: /graphql
+    subscriptions: /subscriptions
+  subscriptions:
+    timeout: 30
+    reconnect: false
+  static:
+    basePath: /
+  enabled: true
+  pageTitle: GraphiQL
+#  cdn:
+#    enabled: false
+#    version: 0.13.0
+#  props:
+#    resources:
+#      query: query.graphql
+#      defaultQuery: defaultQuery.graphql
+#      variables: variables.graphql
+#    variables:
+#      editorTheme: "solarized light"
+#  headers:
+#    Authorization: "Bearer <your-token>"
