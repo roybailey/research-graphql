@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>research-graphql-server-kotlin</artifactId>
+    <packaging>jar</packaging>
+
+    <name>research-graphql-server-kotlin</name>
+    <description>Simple GraphQL server for serving and aggregating other RESTful API data</description>
+
+    <parent>
+        <groupId>me.roybailey</groupId>
+        <artifactId>research-graphql</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <graphql-java-kickstart.version>7.0.1</graphql-java-kickstart.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- JSon Schema -->
+        <dependency>
+            <groupId>me.roybailey</groupId>
+            <artifactId>research-graphql-domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- GraphQL -->
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>${graphql-java-kickstart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphiql-spring-boot-starter</artifactId>
+            <version>${graphql-java-kickstart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>voyager-spring-boot-starter</artifactId>
+            <version>${graphql-java-kickstart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java-kickstart</groupId>
+            <artifactId>graphql-spring-boot-starter-test</artifactId>
+            <version>${graphql-java-kickstart.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>

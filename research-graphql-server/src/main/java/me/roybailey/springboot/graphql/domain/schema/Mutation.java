@@ -1,6 +1,6 @@
 package me.roybailey.springboot.graphql.domain.schema;
 
-import com.coxautodev.graphql.tools.GraphQLRootResolver;
+import com.coxautodev.graphql.tools.GraphQLResolver;
 import me.roybailey.data.schema.ProductDto;
 import me.roybailey.springboot.service.ProductAdaptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 
 @Service
-public class Mutation implements GraphQLRootResolver {
+public class Mutation implements GraphQLResolver {
 
     @Autowired
     ProductAdaptor productAdaptor;

@@ -17,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static org.codehaus.groovy.runtime.DefaultGroovyMethods.collect;
 
 @Slf4j
 @Controller
@@ -47,7 +46,7 @@ public class ProductController {
     @ResponseBody
     @GetMapping(path = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto getProduct(@PathVariable(name = "id") String id) {
-        Product product = productRepository.findOne(id);
+        Product product = productRepository.findById(id).orElse(null);
         log.info("getProduct({}) : {}", id, product);
         return productMapper.toProductDto(product);
     }
@@ -85,8 +84,8 @@ public class ProductController {
     @ResponseBody
     @DeleteMapping(path = "/product/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ProductDto deleteProduct(@PathVariable(name = "id") String id) {
-        Product product = productRepository.findOne(id);
-        productRepository.delete(id);
+        Product product = productRepository.findById(id).orElse(null);
+        productRepository.deleteById(id);
         log.info("deleteProduct({}) : {}", id, product);
         return productMapper.toProductDto(product);
     }

@@ -80,7 +80,7 @@ public class OrderRepositoryTest {
                 .isEqualTo(5);
 
         softly.then(loadAllOrders()).hasSize(count+1);
-        orderRepository.delete(updatedOrder.getId());
+        orderRepository.deleteById(updatedOrder.getId());
         softly.then(loadAllOrders()).hasSize(count);
     }
 
