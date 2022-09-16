@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <graphql-java.version>14.1</graphql-java.version>
+        <graphql-java.version>17.4</graphql-java.version>
         <graphql-java-tools.version>5.2.4</graphql-java-tools.version>
     </properties>
 
