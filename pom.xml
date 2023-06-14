@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
         <slf4j.version>1.7.21</slf4j.version>
         <logback.version>1.2.0</logback.version>
-        <guava.version>30.0-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
         <jackson.version>2.11.1</jackson.version>
         <json-path.version>2.2.0</json-path.version>
         <feign.version>9.4.0</feign.version>
